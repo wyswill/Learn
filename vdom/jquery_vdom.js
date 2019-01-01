@@ -11,18 +11,22 @@ function h(element, attr, children) {
     attr.class = element[1];
   }
   if (element.includes("#")) {
-    element = element.splite("#");
+    element = element.split("#");
     attr.id = element[1];
   }
   return new vNode(element[0], attr, children);
 }
 function render(container, vdom) {
   //将vNode解析，添加到container中.
+  let ele = createElement(vdom);
+  container.append(ele);
+  return container;
+}
+function createElement(vdom) {
   let ele = document.createElement(vdom["element"]);
   ele = setAttr(ele, vdom.attr);
   ele = setChildren(ele, vdom.children);
-  container.append(ele);
-  return container;
+  return ele;
 }
 function setAttr(ele, attr) {
   for (let i in attr) {
@@ -31,25 +35,18 @@ function setAttr(ele, attr) {
   return ele;
 }
 function setChildren(ele, children) {
-  for (let i in children) {
-    let chele = document.createElement(children[i].element);
-    chele = setAttr(chele, children[i].attr);
-    if (typeof children[i].children[i] != "object") {
-      chele.innerHTML = children[i].children;
-    } else {
-      for (let i in children) {
-        let chele = document.createElement(children[i].element);
-        chele = setAttr(chele, children[i].attr);
-        chele = chele.append(render(chele, children[i].children));
-        console.log(chele);
-      }
+  children.forEach(element => {
+    if (typeof element == "object") {
+      let chele = createElement(element);
+      ele.append(chele);
+    } else if (typeof element == "string") {
+      ele.append(element);
     }
-    ele.append(chele);
-  }
+  });
   return ele;
 }
 let vdom = h("div.test", { id: "testid" }, [
-  h("li.ch", {}, ["ch1"]),
+  h("li.ch", {}, [h("div#asd", {}, ["ch1"])]),
   h("li.ch", {}, ["ad"])
 ]);
 let container = document.querySelector(".container");
