@@ -1,11 +1,12 @@
 class vNode {
-  constructor(element, attr, children) {
+  constructor(element, attr = {}, children = []) {
     this.element = element;
     this.attr = attr;
     this.children = children;
   }
 }
 function h(element, attr, children) {
+  if (element == "") throw new Error("element name is undefined");
   if (element.includes(".")) {
     element = element.split(".");
     attr.class = element[1];
@@ -46,8 +47,8 @@ function setChildren(ele, children) {
   return ele;
 }
 let vdom = h("div.test", { id: "testid" }, [
-  h("li.ch", {}, [h("div#asd", {}, ["ch1"])]),
-  h("li.ch", {}, ["ad"])
+  h("div.ch", {}, [h("div#asd", {}, ["ch1"])]),
+  h("p", {}, ["ad"])
 ]);
 let container = document.querySelector(".container");
 render(container, vdom);
