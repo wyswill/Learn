@@ -50,5 +50,7 @@ let vdom = h("div.test", { id: "testid" }, [
   h("div.ch", {}, [h("div#asd", {}, ["ch1"])]),
   h("p", {}, ["ad"])
 ]);
+console.log(vdom);
+
 let container = document.querySelector(".container");
 render(container, vdom);
